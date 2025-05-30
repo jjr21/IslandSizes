@@ -32,18 +32,18 @@ import java.util.*;
 
 class Program {
   static int [][] adjacent = new int [][] {{0,1}, {1,0}, {-1,0}, {0,-1}};
-  public static List<Integer> riverSizes(int[][] matrix) {
+  public static List<Integer> islandSize(int[][] matrix) {
     // Write your code here.
     if(matrix.length == 0) return new ArrayList<Integer>();
     boolean [][] isVisited = new boolean [matrix.length][matrix[0].length];
-    List<Integer> riverSize = new ArrayList<Integer>();
+    List<Integer> islandSize = new ArrayList<Integer>();
     for(int i =0; i < matrix.length; i++){
       for(int j =0; j < matrix[0].length; j++){
         if(matrix[i][j] == 0 || isVisited[i][j]) continue;
-        riverSize.add(findIslandSize(i, j, matrix, isVisited));
+        islandSize.add(findIslandSize(i, j, matrix, isVisited));
       }
     }
-    return riverSize;
+    return islandSize;
   }
 
   public static int findIslandSize(int i, int j, int [][] matrix, boolean [][] isVisited){
