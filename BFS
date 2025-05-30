@@ -1,0 +1,79 @@
+
+ ### 🏝️ Island Sizes
+
+You're given a 2D grid (matrix) made up of `0`s and `1`s.  
+Each `0` represents water, and each `1` represents land.
+
+An **island** is a group of `1`s that are connected **horizontally or vertically** (not diagonally). The **size** of an island is the number of connected land cells (`1`s) in that group.
+
+Islands can have any shape — straight lines, corners, or twists — as long as the land pieces are directly connected.
+
+Write a function that scans the entire matrix and returns a list of the sizes of all islands found. The order of the sizes in the list does not matter.
+
+📥 Sample Input
+grid = [
+  [1, 0, 0, 1, 0],
+  [1, 0, 1, 0, 0],
+  [0, 0, 1, 0, 1],
+  [1, 0, 1, 0, 1],
+  [1, 0, 1, 1, 0],
+]
+
+📤 Sample Output
+[2, 1, 5, 2, 2]
+
+optimize solution: BFS
+time complexity: N(W*H)
+space complexity: O(W*H)
+W is width of the matrix
+H is height of the matrix 
+
+import java.util.*;
+
+class Program {
+  static int [][] adjacent = new int [][] {{0,1}, {1,0}, {-1,0}, {0,-1}};
+  public static List<Integer> riverSizes(int[][] matrix) {
+    // Write your code here.
+    if(matrix.length == 0) return new ArrayList<Integer>();
+    boolean [][] isVisited = new boolean [matrix.length][matrix[0].length];
+    List<Integer> riverSize = new ArrayList<Integer>();
+    for(int i =0; i < matrix.length; i++){
+      for(int j =0; j < matrix[0].length; j++){
+        if(matrix[i][j] == 0 || isVisited[i][j]) continue;
+        riverSize.add(findIslandSize(i, j, matrix, isVisited));
+      }
+    }
+    return riverSize;
+  }
+
+  public static int findIslandSize(int i, int j, int [][] matrix, boolean [][] isVisited){
+    Queue<Integer []> queue = new LinkedList<Integer []>();
+    Integer [] inital = new Integer []{i,j};
+    queue.offer(inital);
+    int size = 0;
+    while(!queue.isEmpty()){
+      Integer [] currNode = queue.poll();
+      int x = currNode[0];
+      int y = currNode[1];
+      isVisited[x][y] = true;
+      checkEnqueue(matrix, isVisited, x, y, queue);
+      size++;
+    }
+    return size;
+  }
+
+  public static void checkEnqueue(int [][] matrix, boolean [][] isVisited, int x, int y, Queue<Integer []> queue){
+    for(int adj[] : adjacent){
+      int a = adj[0]+x;
+      int b = adj[1]+y;
+      if(a >= 0 && b >= 0 && a < matrix.length && b < matrix[0].length && matrix[a][b]==1 && !isVisited[a][b]){
+        Integer [] newNode = new Integer []{a,b};
+        queue.offer(newNode);
+        isVisited[a][b] = true;
+      }
+    }
+  }
+}
+
+
+
